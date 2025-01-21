@@ -1,0 +1,28 @@
+{
+  "name": "adminjs-express",
+  "version": "1.0.0",
+  "description": "AdminJS + MongoDB + Express starter repository.",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "author": "Abhishek Aligh",
+  "license": "ISC",
+  "dependencies": {
+    "@adminjs/express": "^6.1.0",
+    "@adminjs/mongoose": "^4.1.0",
+    "@adminjs/themes": "^1.0.1",
+    "adminjs": "^7.8.13",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.2.1",
+    "nodemon": "^3.1.0",
+    "tslib": "^2.8.1"
+  }
+}
