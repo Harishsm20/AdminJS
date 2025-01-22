@@ -11,7 +11,7 @@
   "author": "Abhishek Aligh",
   "license": "ISC",
   "dependencies": {
-    "@adminjs/express": "^6.1.0",
+    "@adminjs/express": "^6.1.1",
     "@adminjs/mongoose": "^4.1.0",
     "@adminjs/themes": "^1.0.1",
     "adminjs": "^7.8.13",
