@@ -1,3 +1,4 @@
+import Classroom from "../models/classroom.js";
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 
@@ -16,11 +17,21 @@ const userResource = {
           { value: "Student", label: "Student" },
         ],
       },
+      classroom: {
+        type: "reference",
+        reference: "Classroom", 
+        isVisible: true,
+        isRequired: true,
+      },
       mobile: { type: "string", isVisible: true },
     },
     actions: {
       new: {
         before: async (request) => {
+          // Log the incoming payload to debug validation issues
+          console.log("Incoming Request Payload:", request.payload);
+
+          // Hash the password before saving
           if (request.payload.password) {
             const hashedPassword = await bcrypt.hash(request.payload.password, 10);
             request.payload = {
@@ -29,6 +40,7 @@ const userResource = {
               password: undefined,
             };
           }
+
           return request;
         },
       },

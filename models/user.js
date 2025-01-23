@@ -13,7 +13,13 @@ const UserSchema = new Schema({
     enum: ["Principal", "Teacher", "Student"],
   },
   mobile: { type: String, required: false },
-  classroom: { type: String, required: false },
+  classroom: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Classroom", // Reference to Classroom model
+    required: function () {
+      return this.role === "Student"; // Required only for students
+    },
+  },
 });
 
 UserSchema.pre("save", async function (next) {
