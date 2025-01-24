@@ -4,13 +4,14 @@ const classroomResource = {
   resource: Classroom,
   options: {
     properties: {
-      name: { isVisible: { list: true, filter: true, show: true, edit: true } },
-      teacher: {
-        reference: "User",
-        isVisible: { list: true, filter: true, show: true, edit: true },
-      },
+      name: { isVisible: true },
     },
+  },
+  isAccessible: ({ currentAdmin }) => {
+    // Allow access only for Principals
+    return currentAdmin && currentAdmin.role === "Principal";
   },
 };
 
 export default classroomResource;
+

@@ -1,5 +1,6 @@
 import AdminJSExpress from "@adminjs/express";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import { generateToken, refreshToken } from "../service/authService.js";
 
@@ -19,7 +20,7 @@ const adminAuth = (admin) => {
           const token = generateToken({ email: adminUser.email, role: adminUser.role });
 
           // Return user details and the token
-          return { token, email: adminUser.email };
+          return { email: adminUser.email, role: adminUser.role, token };
         } catch (error) {
           console.error("Error during authentication:", error);
           return null;
@@ -33,7 +34,7 @@ const adminAuth = (admin) => {
       loginPath: "/admin/login",
       logoutPath: "/admin/logout",
       before: async (req, res, next) => {
-        const token = req.cookies.token;
+        const token = req.cookies?.token;
 
         if (!token) {
           return res.redirect("/admin/login");
@@ -42,16 +43,19 @@ const adminAuth = (admin) => {
         try {
           // Verify the token
           const decoded = jwt.verify(token, process.env.JWT_SECRET);
-          req.user = decoded;
+          req.user = decoded; // Attach user information to the request
           next();
         } catch (err) {
-          // If token is expired, try to refresh it
+          console.log("Token verification failed. Attempting refresh...");
+
+          // Try to refresh the token if it's expired
           const refreshedToken = refreshToken(token);
           if (refreshedToken) {
             res.cookie("token", refreshedToken, {
               httpOnly: true,
               maxAge: 60 * 60 * 1000, // 1 hour
             });
+            req.user = jwt.verify(refreshedToken, process.env.JWT_SECRET); // Attach refreshed user info
             next();
           } else {
             console.log("Token expired or invalid. Redirecting to login.");
@@ -61,8 +65,9 @@ const adminAuth = (admin) => {
         }
       },
       after: async (req, res, next) => {
-        if (req.session && req.session.token) {
-          res.cookie("token", req.session.token, {
+        // Save refreshed token back to the cookies, if applicable
+        if (req.user?.token) {
+          res.cookie("token", req.user.token, {
             httpOnly: true,
             maxAge: 60 * 60 * 1000, // 1 hour
           });

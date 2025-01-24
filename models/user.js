@@ -12,16 +12,23 @@ const UserSchema = new Schema({
     required: true,
     enum: ["Principal", "Teacher", "Student"],
   },
-  mobile: { type: String, required: false },
+  rollNo: {
+    type: String,
+    required: function () {
+      return this.role === "Student"; // Required only for students
+    },
+  },
   classroom: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Classroom", // Reference to Classroom model
+    ref: "Classroom",
     required: function () {
       return this.role === "Student"; // Required only for students
     },
   },
 });
 
+
+// Middleware to hash password before saving
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();

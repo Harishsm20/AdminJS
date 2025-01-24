@@ -20,9 +20,25 @@ const adminConfig = () => {
       softwareBrothers: false, 
     },
     locale: {
+      language: "en", // Default language
       translations: {
         labels: {
-          loginWelcome: "Admin Login",
+          role: {
+            Principal: "Principal",
+            Teacher: "Teacher",
+            Student: "Student",
+          },
+        },
+        properties: {
+          email: "Email",
+          name: "Name",
+          mobile: "Mobile",
+          role: "Role",
+          rollNo: "Roll Number",
+          classroom: "Classroom",
+        },
+        actions: {
+          new: "Add New User",
         },
       },
     },
