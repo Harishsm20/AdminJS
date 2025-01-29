@@ -4,6 +4,7 @@ import userResource from "../resource/userResource.js";
 import classroomResource from "../resource/classroomResource.js";
 import timetableResource from "../resource/timetableResource.js";
 
+
 // Register the Mongoose adapter
 AdminJS.registerAdapter({
   Resource: AdminJSMongoose.Resource,
@@ -16,7 +17,7 @@ const adminConfig = () => {
     rootPath: "/admin",
     branding: {
       companyName: "Classroom Management",
-      logo: "https://google.com/logo.png", 
+      logo: "/assets/loader.gif", 
       softwareBrothers: false, 
     },
     locale: {

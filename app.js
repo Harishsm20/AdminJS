@@ -11,6 +11,8 @@ const PORT = 8000;
 
 const start = async () => {
   const app = express();
+  
+  app.use("/assets", express.static("assets"));
 
   app.use(express.json());
   app.use(cookieParser());
