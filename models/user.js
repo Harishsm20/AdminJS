@@ -18,6 +18,7 @@ const UserSchema = new Schema({
       return this.role === "Student"; // Required only for students
     },
   },
+  subject: { type: String, required: function () { return this.role === "Teacher"; } }, // Subject for teachers
   classroom: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Classroom",
