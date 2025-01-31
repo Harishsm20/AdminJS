@@ -3,6 +3,7 @@ import * as AdminJSMongoose from "@adminjs/mongoose";
 import userResource from "../resource/userResource.js";
 import classroomResource from "../resource/classroomResource.js";
 import timetableResource from "../resource/timetableResource.js";
+import timingResource from "../resource/timingResource.js";
 
 
 // Register the Mongoose adapter
@@ -13,7 +14,7 @@ AdminJS.registerAdapter({
 
 const adminConfig = () => {
   return new AdminJS({
-    resources: [userResource, classroomResource, timetableResource],
+    resources: [userResource, classroomResource, timetableResource, timingResource],
     rootPath: "/admin",
     branding: {
       companyName: "Classroom Management",

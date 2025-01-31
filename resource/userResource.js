@@ -6,6 +6,7 @@ const userResource = {
   resource: User,
   options: {
     properties: {
+      _id:{isVisible: false},
       password: { isVisible: false },
       hashedPassword: { isVisible: false }, // Remove handling of hashedPassword
       role: {
