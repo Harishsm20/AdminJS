@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
-
-const ClassroomSchema = new Schema({
-  name: { type: String, required: true, isVisible: true  },
-  startTime: { type: String, required: true },
-  endTime: { type: String, required: true },
-  teacher: { type: Schema.Types.ObjectId, ref: "User" },
+const ClassroomSchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true, isVisible: true},
+  teacher: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  timetable: [{ type: mongoose.Schema.Types.ObjectId, ref: "Timetable" }],
 });
 
 const Classroom = mongoose.model("Classroom", ClassroomSchema);
