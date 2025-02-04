@@ -6,12 +6,13 @@ import classroomResource from "../resource/classroomResource.js";
 import timetableResource from "../resource/timetableResource.js";
 import timingResource from "../resource/timingResource.js";
 
-// ✅ Create a single shared instance of ComponentLoader
 const componentLoader = new ComponentLoader();
-export { componentLoader }; // ✅ Ensure this is exported
 
-// ✅ Register TimePicker globally so it can be used in all resources
-componentLoader.add("TimePicker", "../components/TimePicker");
+const components = {
+  TimePickerEdit: componentLoader.add("TimePickerEdit", "../components/TimePickerEdit"),
+  TimePickerShow: componentLoader.add("TimePickerShow", "../components/TimePickerShow"),
+};
+
 
 AdminJS.registerAdapter({
   Resource: AdminJSMongoose.Resource,
@@ -20,7 +21,34 @@ AdminJS.registerAdapter({
 
 const adminConfig = () => {
   return new AdminJS({
-    resources: [userResource, classroomResource, timetableResource, timingResource],
+    resources: [
+      userResource, 
+      classroomResource, 
+      timetableResource, 
+      {
+        ...timingResource,
+        options: {
+          ...timingResource.options,
+          properties: {
+            ...timingResource.options.properties,
+            startTime: {
+              ...timingResource.options.properties.startTime,
+              components: {
+                edit: components.TimePickerEdit,
+                show: components.TimePickerShow,
+              },
+            },
+            endTime: {
+              ...timingResource.options.properties.endTime,
+              components: {
+                edit: components.TimePickerEdit,
+                show: components.TimePickerShow,
+              },
+            },
+          },
+        },
+      },
+    ],
     componentLoader, // ✅ Ensure componentLoader is passed here
     rootPath: "/admin",
     branding: {
