@@ -1,7 +1,4 @@
 import Timing from "../models/timing.js";
-import { ComponentLoader } from "adminjs";
-
-const componentLoader = new ComponentLoader();
 
 const timingResource = {
   resource: Timing,
@@ -10,19 +7,17 @@ const timingResource = {
       _id: { isVisible: false },
       name: { isVisible: true },
       startTime: {
-        type: "string", // ✅ Display as a string
+        type: "string", // ✅ Display as string instead of time picker
         isVisible: { list: true, filter: true, show: true, edit: true },
-        components: {
-          edit: componentLoader.add("TimePickerEdit", "./components/TimePickerEdit"),
-          show: componentLoader.add("TimePickerShow", "./components/TimePickerShow"),
+        props: {
+          placeholder: "HH:mm", // Help users enter correct format
         },
       },
       endTime: {
         type: "string",
         isVisible: { list: true, filter: true, show: true, edit: true },
-        components: {
-          edit: componentLoader.add("TimePickerEdit", "./components/TimePickerEdit"),
-          show: componentLoader.add("TimePickerShow", "./components/TimePickerShow"),
+        props: {
+          placeholder: "HH:mm",
         },
       },
       type: {
@@ -36,10 +31,10 @@ const timingResource = {
       new: {
         before: async (request) => {
           if (request.payload.startTime) {
-            request.payload.startTime = new Date(request.payload.startTime).toTimeString().slice(0, 5);
+            request.payload.startTime = request.payload.startTime.slice(0, 5); // ✅ Ensure HH:mm format
           }
           if (request.payload.endTime) {
-            request.payload.endTime = new Date(request.payload.endTime).toTimeString().slice(0, 5);
+            request.payload.endTime = request.payload.endTime.slice(0, 5);
           }
           return request;
         },
@@ -47,10 +42,10 @@ const timingResource = {
       edit: {
         before: async (request) => {
           if (request.payload.startTime) {
-            request.payload.startTime = new Date(request.payload.startTime).toTimeString().slice(0, 5);
+            request.payload.startTime = request.payload.startTime.slice(0, 5);
           }
           if (request.payload.endTime) {
-            request.payload.endTime = new Date(request.payload.endTime).toTimeString().slice(0, 5);
+            request.payload.endTime = request.payload.endTime.slice(0, 5);
           }
           return request;
         },
