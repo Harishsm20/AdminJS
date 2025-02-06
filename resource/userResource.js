@@ -6,29 +6,55 @@ const userResource = {
   resource: User,
   options: {
     properties: {
-      _id:{isVisible: false},
+      _id: { isVisible: false },
       password: { isVisible: false },
-      hashedPassword: { isVisible: false }, // Remove handling of hashedPassword
+      hashedPassword: { isVisible: false },
+
+      // ✅ Role at the top
       role: {
+        position: 1,
         availableValues: [
           { value: "Principal", label: "Principal" },
           { value: "Teacher", label: "Teacher" },
           { value: "Student", label: "Student" },
         ],
       },
+
+      email: { type: "string", position: 2 },
+      mobile: { type: "string", position: 3 },
+
       classroom: {
         type: "reference",
         reference: "Classroom",
-        isVisible: true,
-        isRequired: ({ record }) => record?.role === "Student",
+        position: 4,
+        isVisible: { list: true, filter: true, show: true, edit: true },
+        isRequired: ({ record, currentAdmin }) => record?.role === "Student",
       },
+
+      // ✅ Roll No appears last and is visible only for students
       rollNo: {
         type: "string",
-        isVisible: ({ record }) => record?.role === "Student",
+        position: 100,
+        isVisible: { list: true, filter: true, show: ({ record }) => record?.role === "Student", edit: ({ record }) => record?.role === "Student" },
         isRequired: ({ record }) => record?.role === "Student",
       },
-      mobile: { type: "string", isVisible: true },
+
+      // ✅ Subject appears last and is visible only for teachers
+      subject: {
+        availableValues: [
+          { value: "Physics", label: "Physics" },
+          { value: "Chemistry", label: "Chemistry" },
+          { value: "Maths", label: "Maths" },
+          { value: "Biology", label: "Biology" },
+          { value: "Social", label: "Social" },
+          { value: "Tamil", label: "Tamil" },
+          { value: "English", label: "English" },
+        ],
+        position: 101,
+        isVisible: { list: true, filter: true, show: ({ record }) => record?.role === "Teacher", edit: ({ record }) => record?.role === "Teacher" },
+      },
     },
+
     actions: {
       new: {
         before: async (request) => {
@@ -44,7 +70,7 @@ const userResource = {
               // Generate plain password and save it under "password" field
               const generatedPassword =
                 role === "Student" ? `${email.split("@")[0]}${rollNo}` : email.split("@")[0];
-              
+
               request.payload = { ...request.payload, password: generatedPassword };
             }
 
@@ -73,6 +99,7 @@ const userResource = {
       },
     },
   },
+
   isAccessible: ({ currentAdmin }) => {
     return currentAdmin && (currentAdmin.role === "Principal" || currentAdmin.role === "Teacher");
   },
